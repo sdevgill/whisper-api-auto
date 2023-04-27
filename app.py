@@ -6,8 +6,10 @@ import openai
 from dotenv import dotenv_values
 from tinytag import TinyTag
 
+
 config = dotenv_values(".env")
 openai.api_key = config["OPENAI_API_KEY"]
+
 
 input_folder = "./input/"
 output_folder = "./output/"
@@ -74,10 +76,11 @@ for filename in os.listdir(input_folder):
         print(
             f"Transcription #{transcription_count} for '{filename}' "
             f"has been saved. Cost: ~${cost:.4f} "
-            f"Time: {formatted_time}"
+            f"Time taken: {formatted_time}"
         )
     else:
         print(f"{filename} has an unsupported file extension. Skipping...")
+
 
 print(f"\nFinished processing {transcription_count} audio files.\n")
 print(f"Total cost: ~${total_cost:.4f}")
