@@ -15,11 +15,9 @@ valid_extensions = [
 ]  # Add or modify the file extensions as needed
 cost_per_minute = 0.006
 
-# Create folders if they doesn't exist
-if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
-if not os.path.exists(input_folder):
-    os.makedirs(input_folder)
+# Create folders if they don't exist
+os.makedirs(output_folder, exist_ok=True)
+os.makedirs(input_folder, exist_ok=True)
 
 transcription_count = 0
 total_cost = 0
