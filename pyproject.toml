@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "whisper-api-auto"
+version = "0.1.0"
+description = "Auto transcribe audio files with Whisper"
+authors = ["Dev Gill <26435947+sdevgill@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "whisper_api_auto"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai = "^0.27.4"
+tinytag = "^1.9.0"
+python-dotenv = "^1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.22.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
