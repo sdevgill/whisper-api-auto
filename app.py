@@ -24,8 +24,6 @@ if not os.path.exists(input_folder):
 transcription_count = 0
 total_cost = 0
 
-def main():
-
 
 # Iterate through all files in the input folder
 for filename in os.listdir(input_folder):
