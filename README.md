@@ -30,6 +30,12 @@ cd whisper-api-auto
 poetry install
 ```
 
+3. Activate the virtual environment
+
+```
+poetry shell
+```
+
 ## Usage
 
 1. Create an `.env` file in the project folder from the `.env.example` file
@@ -46,4 +52,8 @@ OPENAI_API_KEY=YOUR_API_KEY
 
 3. Create an `input` folder in the project folder and add your audio files to it
 
-4. Run the 'whisper-api-auto.ipynb' notebook
+4. Run the app
+
+```
+python app.py
+```
