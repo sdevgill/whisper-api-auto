@@ -1,4 +1,7 @@
 import os
+import time
+from datetime import timedelta
+
 import openai
 from dotenv import dotenv_values
 from tinytag import TinyTag
@@ -21,6 +24,7 @@ os.makedirs(input_folder, exist_ok=True)
 
 transcription_count = 0
 total_cost = 0
+total_time = 0
 
 
 # Iterate through all files in the input folder
@@ -34,8 +38,18 @@ for filename in os.listdir(input_folder):
         )
 
         # Transcribe the audio file
+        start_time = time.time()
         with open(file_path, "rb") as audio_file:
             response = openai.Audio.transcribe(model="whisper-1", file=audio_file)
+        end_time = time.time()
+
+        processing_time = timedelta(seconds=end_time - start_time)
+        total_time += processing_time.total_seconds()
+
+        # Extract hours, minutes, and seconds from the processing_time
+        hours, remainder = divmod(processing_time.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:02d}.{int(processing_time.microseconds / 10000):02d}"
 
         # Get the duration using TinyTag
         audio = TinyTag.get(file_path)
@@ -53,14 +67,19 @@ for filename in os.listdir(input_folder):
             f.write(separator)
             f.write(text)
             f.write(separator)
-            f.write(f"\nCost of this transcription: ~${cost:.4f}\n")
+            f.write(f"\nCost: ~${cost:.4f}\n")
+            f.write(f"Time: {formatted_time}\n")
 
         transcription_count += 1
         print(
-            f"Transcription #{transcription_count} for {filename} has been saved. Cost: ~${cost:.4f}"
+            f"Transcription #{transcription_count} for '{filename}' "
+            f"has been saved. Cost: ~${cost:.4f} "
+            f"Time: {formatted_time}"
         )
     else:
         print(f"{filename} has an unsupported file extension. Skipping...")
 
 print(f"\nFinished processing {transcription_count} audio files.\n")
 print(f"Total cost: ~${total_cost:.4f}")
+total_time_formatted = f"{int(total_time // 3600):02d}:{int((total_time % 3600) // 60):02d}:{int(total_time % 60):02d}.{int((total_time % 1) * 100):02d}"
+print(f"Total time: {total_time_formatted}")
