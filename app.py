@@ -39,7 +39,7 @@ def main():
         if file_extension in valid_extensions:
             file_path = os.path.join(input_folder, filename)
             output_file_path = os.path.join(
-                output_folder, f"{os.path.splitext(filename)[0]}_transcription.txt"
+                output_folder, f"{os.path.splitext(filename)[0]}_transcript.txt"
             )
 
             # Transcribe the audio file
@@ -77,7 +77,7 @@ def main():
 
             transcription_count += 1
             print(
-                f"Transcription #{transcription_count} for '{filename}' "
+                f"Transcript #{transcription_count} for '{filename}' "
                 f"has been saved. Cost: ~${cost:.4f} "
                 f"Time taken: {formatted_time}"
             )
