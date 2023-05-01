@@ -31,6 +31,7 @@ def main():
     total_time = 0
 
     print("--------------------------------")  # Add horizontal line at the start
+    print("Transcription started... please wait...\n")
 
     # Iterate through all files in the input folder
     for filename in os.listdir(input_folder):
