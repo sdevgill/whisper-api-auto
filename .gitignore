@@ -139,3 +139,5 @@ dmypy.json
 # Input and output files
 input/
 output/
+formatted_output/
+gpt_output/
