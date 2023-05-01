@@ -12,8 +12,9 @@ to transcribe audio files and calculate the transcription cost, automatically.
 
 - Supports MP3, WAV, M4A audio formats.
 - Automatically transcribes all valid audio files in the input folder.
-- Calculates the cost of each transcription based on the audio duration ($0.006 currently).
-- Saves transcriptions and costs in separate text files in the output folder.
+- Calculates the cost of each transcription based on the audio duration ($0.006/min currently).
+- Saves transcriptions in separate text files in the output folder.
+- Using the format.py script, automatically format the wall of text into short paragraphs.
 
 ## Installation
 
@@ -56,4 +57,10 @@ OPENAI_API_KEY=YOUR_API_KEY
 
 ```
 python app.py
+```
+
+5. If needed, run the format script to format the transcriptions into short paragraphs
+
+```
+python format.py
 ```
