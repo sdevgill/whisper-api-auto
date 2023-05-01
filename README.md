@@ -15,6 +15,7 @@ to transcribe audio files and calculate the transcription cost, automatically.
 - Calculates the cost of each transcription based on the audio duration ($0.006/min currently).
 - Saves transcriptions in separate text files in the output folder.
 - Using the format.py script, automatically format the wall of text into short paragraphs.
+- Using the gpt.py script, get gpt-3.5-turbo generated paragraphs for each transcription.
 
 ## Installation
 
@@ -63,4 +64,10 @@ python app.py
 
 ```
 python format.py
+```
+
+6. If needed, run the gpt script to get gpt-3.5-turbo generated paragraphs for each transcription
+
+```
+python gpt.py
 ```
