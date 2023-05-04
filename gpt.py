@@ -47,15 +47,29 @@ def process_text_with_gpt(text):
     total_tokens = 0
 
     for chunk in chunks:
+        # Possible prompt formats:
+        # Format the text in triple quotes below into paragraphs. Do not return anything other than the formatted text. Do not wrap responses in quotes.
+        # message = [
+        #     {
+        #         "role": "system",
+        #         "content": (
+        #             """
+        #             Go through the text in triple quotes. Split text into short paragraphs.
+        #             Do not wrap your response in quotes. Do not change the text content at all.
+        #             Do not summarize.
+        #             Your only job is to return the original text, nothing else, just with paragraphs.\n
+        #             """
+        #             f""" {chunk} """
+        #         ),
+        #     }
+        # ]
+
         message = [
             {
                 "role": "system",
                 "content": (
                     """
-                    Go through the text in triple quotes. Split text into short paragraphs.
-                    Do not wrap your response in quotes. Do not change the text content at all.
-                    Do not summarize.
-                    Your only job is to return the original text, nothing else, just with paragraphs.\n
+                    Format the text transcript in triple quotes below into paragraphs. Do not return anything other than the formatted text. Do not summarize. Do not wrap responses in quotes.\n
                     """
                     f""" {chunk} """
                 ),
@@ -98,7 +112,7 @@ def process_file(input_file, output_folder):
         file.write(f"\nCost: ${file_tokens * 0.000002:.6f}")
 
     print(
-        f"Processed '{input_file}' with gpt. Total tokens: {file_tokens}, Cost: ${file_tokens * 0.000002:.6f}"
+        f"Processed '{input_file}' with gpt. Tokens: {file_tokens}, Cost: ${file_tokens * 0.000002:.6f}"
     )
 
     return file_tokens
@@ -121,7 +135,7 @@ def process_all_files(input_folder, output_folder):
 
 def main():
     print(separator)
-    print("Starting gpt processing...")
+    print("Starting gpt processing...\n")
     start_time = time.time()
 
     input_folder = "./output"
