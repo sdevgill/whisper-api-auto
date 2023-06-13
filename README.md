@@ -2,6 +2,8 @@
 
 A simple and easy-to-use audio transcription app that uses OpenAI's Whisper API
 to transcribe audio files and calculate the transcription cost, automatically.
+Optionally, you can use the gpt-format.py script to format the transcriptions
+into short paragraphs using the gpt-3.5-turbo-16k model.
 
 ## Requirements
 
@@ -14,8 +16,7 @@ to transcribe audio files and calculate the transcription cost, automatically.
 - Automatically transcribes all valid audio files in the input folder.
 - Calculates the cost of each transcription based on the audio duration ($0.006/min currently).
 - Saves transcriptions in separate text files in the output folder.
-- Using the format.py script, automatically format the wall of text into short paragraphs.
-- Using the gpt.py script, get gpt-3.5-turbo generated paragraphs for each transcription.
+- Using the gpt-format.py script, automatically format the wall of text into short paragraphs.
 
 ## Installation
 
@@ -66,7 +67,7 @@ python app.py
 python format.py
 ```
 
-6. If needed, run the gpt script to get gpt-3.5-turbo generated paragraphs for each transcription
+6. If needed, run the gpt-format.py script to get gpt-3.5-turbo-16k generated paragraphs for each transcription
 
 ```
 python gpt.py
