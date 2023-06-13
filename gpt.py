@@ -12,89 +12,58 @@ openai.api_key = config["OPENAI_API_KEY"]
 separator = "\n--------------------------------\n"
 
 
-# Split text into chunks of 8000 characters
-def split_text(
-    text, chunk_size=8000
-):  # 8000 chars for gpt-3.5-turbo prompts, ~1,700 tokens
-    chunks = []
-    current_chunk = []
-    current_chunk_size = 0
-
-    sentences = text.split(". ")
-
-    for sentence in sentences:
-        sentence_length = len(sentence) + 1  # Add 1 to account for the removed period
-        if current_chunk_size + sentence_length > chunk_size:
-            chunks.append(". ".join(current_chunk) + ".")
-            current_chunk = [sentence]
-            current_chunk_size = sentence_length
-        else:
-            current_chunk.append(sentence)
-            current_chunk_size += sentence_length
-
-    if current_chunk:
-        chunks.append(". ".join(current_chunk) + ".")
-
-    return chunks
-
-
-# Process a chunk of text with gpt-3.5-turbo
 def process_text_with_gpt(text):
-    max_tokens = 2048  # Reserve tokens for the prompt and other overheads
-    chunks = split_text(text, chunk_size=8000)
+    max_tokens = 2000  # 8,192 - 192: Reserve tokens for the prompt and other overheads
 
     edited_text = ""
     total_tokens = 0
 
-    for chunk in chunks:
-        # Possible prompt formats:
-        # Format the text in triple quotes below into paragraphs. Do not return anything other than the formatted text. Do not wrap responses in quotes.
-        # message = [
-        #     {
-        #         "role": "system",
-        #         "content": (
-        #             """
-        #             Go through the text in triple quotes. Split text into short paragraphs.
-        #             Do not wrap your response in quotes. Do not change the text content at all.
-        #             Do not summarize.
-        #             Your only job is to return the original text, nothing else, just with paragraphs.\n
-        #             """
-        #             f""" {chunk} """
-        #         ),
-        #     }
-        # ]
+    # message = [
+    #     {
+    #         "role": "system",
+    #         "content": (
+    #             """
+    #             This is a transcript from a podcast. Please summarize it. Then, list key points in bullet points. Finally, write a conclusion.\n
+    #             """
+    #         ),
+    #         "role": "user",
+    #         "content": f""" {text} """,
+    #     }
+    # ]
 
-        message = [
-            {
-                "role": "system",
-                "content": (
-                    """
-                    Format the text transcript in triple quotes below into paragraphs. Do not return anything other than the formatted text. Do not summarize. Do not wrap responses in quotes.\n
-                    """
-                    f""" {chunk} """
-                ),
-            }
-        ]
+    message = [
+        {
+            "role": "system",
+            "content": (
+                """
+                This is a transcript. Your task is to format this transcript into clear, readable paragraphs. You should not change any of the content, nor should you add any summaries or bullet points.
+                """
+            ),
+            "role": "user",
+            "content": f""" {text} """,
+        }
+    ]
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=message,
-            max_tokens=max_tokens,
-            temperature=0.7,
-            top_p=1,
-            frequency_penalty=0,
-            presence_penalty=0,
-        )
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k",
+        # model="gpt-4",
+        messages=message,
+        max_tokens=max_tokens,
+        temperature=0.5,  # 0.5 works best for transcribing into paragraphs
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,
+    )
 
-        edited_chunk = response.choices[0].message.content.strip()
-        edited_text += " " + edited_chunk
+    edited_chunk = response.choices[0].message.content.strip()
+    edited_text += " " + edited_chunk
 
-        total_tokens += response.usage.total_tokens
+    total_tokens += response.usage.total_tokens
 
     return edited_text.strip(), total_tokens
 
 
-# Process a file with gpt-3.5-turbo
+# Process the file
 def process_file(input_file, output_folder):
     with open(input_file, "r", encoding="utf-8") as file:
         long_text = file.read()
